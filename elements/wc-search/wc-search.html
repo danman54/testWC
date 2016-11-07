@@ -1,0 +1,143 @@
+<!--
+@license
+Copyright (c) 2016 The Polymer Project Authors. All rights reserved.
+This code may only be used under the BSD style license found at http://polymer.github.io/LICENSE.txt
+The complete set of authors may be found at http://polymer.github.io/AUTHORS.txt
+The complete set of contributors may be found at http://polymer.github.io/CONTRIBUTORS.txt
+Code distributed by Google as part of the polymer project is also
+subject to an additional IP rights grant found at http://polymer.github.io/PATENTS.txt
+-->
+<link rel="import" href="../../bower_components/polymer/polymer.html">
+<link rel="import" href="../../bower_components/iron-ajax/iron-ajax.html">
+<link rel="import" href="../../bower_components/iron-list/iron-list.html">
+<link rel="import" href="../../bower_components/paper-button/paper-button.html">
+
+<dom-module id="wc-search">
+  <template>
+    <style>
+      :host {
+        display: block;
+
+        padding: 10px;
+      }
+      #container{
+        width:80%;
+        position: relative;
+        margin: 0 auto;
+      }
+      #search-container{
+        display:block;
+        width: 100%;
+        margin: 50px auto;
+
+      }
+      input#search{
+        width: 100%;
+        height: 40px;
+        font-size: 20px;
+      }
+
+      pre#instructions{
+        background: #ffefb4;
+        padding: 10px;
+        white-space: pre-wrap;
+        white-space: -moz-pre-wrap;
+
+      }
+      ul#response{
+        list-style: none;
+        padding: 0;
+      }
+
+      .horizontal-section{
+        font-size: 15px;
+        font-family: sans-serif, Arial;
+        padding:20px;
+        border-bottom: #c2c2c2 1px solid;
+      }
+
+      span.search-term{
+        background: #ffc0f7;
+      }
+
+      span.wine-label {
+        font-weight: bolder;
+        font-size: 18px;
+
+      }
+    </style>
+
+    <div class="card">
+
+      <div id="container">
+        <div id="search-container">
+          <iron-ajax
+            id="ajax"
+            method="GET"
+            url="../../api/search.php"
+            params="[[_setParams(searchq)]]"
+            handle-as="json"
+            debounce-duration="300"
+            last-response="{{ajaxResponse}}"></iron-ajax>
+          <input placeholder="Live Search..." id="search" type="text" name="q" value="">
+          <pre id="instructions">Search for "fizz" or "estate"</pre>
+
+          <button id="button" type="button" name="button">Search</button>
+          <a href="{{baseUrl}}register-wine">Or, Register a New Wine</a>
+
+          <template is="dom-repeat" items="[[ajaxResponse]]">
+            <div class="horizontal-section">
+              <p> <span class="wine-label">Producer:</span> [[item.producer]] <span class="wine-label">Vintage:</span> [[item.vintage]]</p>
+              <p> <span class="wine-label"> Wine Name:</span> [[item.wine_name]] </p>
+              <a href="[[_assessLink(item.destination,item.vintage,item.wine_name,item.producer)]]" tabindex="-1">
+                <paper-button raised>Assess</paper-button>
+              </a>
+            </div>
+          </template>
+
+        </div>
+      </div>
+    </div>
+  </template>
+
+  <script>
+    Polymer({
+      is: 'wc-search',
+
+      properties: {
+        searchq: {
+          type: String
+        },
+        response: {
+          type: Object
+        }
+      },
+
+      listeners: {
+        'button.click' : '_sendSearch'
+
+      },
+      _sendSearch : function (e){
+        //sets the query value which executes a state change on "searchTerm"
+        //which then runs '_setParams(searchTerm)' on iron-ajax
+        this.searchq = this.$.search.value;
+        //this tells iron ajax to sent out the request.
+        this.$.ajax.generateRequest();
+        this.response = this.$.ajax.lastResponse;
+      },
+      _setParams: function(searchq){
+        return {"q": searchq };
+      },
+      _assessLink(destination,vin,name,prod){
+        var vintage = vin.replace(" ", "%20");
+        var wine_name = name.replace(" ", "%20");
+        var producer = prod.replace(" ", "%20");
+        return "/"+destination+"-assessment?" +
+                "style=" + destination + "&vin=" + vintage + "&name=" + wine_name + "&prod=" + producer;
+      }
+    });
+
+
+
+  </script>
+</dom-module>

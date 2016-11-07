@@ -1,0 +1,55 @@
+<link rel="import" href="../../bower_components/polymer/polymer.html">
+<link rel="import" href="../../bower_components/iron-selector/iron-selectable.html">
+<link rel="import" href="../../bower_components/iron-form/iron-form.html">
+
+
+
+<dom-module id="wc-assess">
+    <template>
+        <style>
+            :host {
+                display: block;
+                width:90%;
+                margin: 20px auto;
+            }
+
+
+            #iron-form  {
+                display: block;
+            }
+
+
+        </style>
+        <form id="iron-form" is= "iron-form" method="[[method]]" action="[[action]]" >
+
+        <content></content>
+        </form>
+
+    </template>
+
+    <script>
+        (function(){
+
+            Polymer({
+                is: "wc-assess",
+
+                properties: {
+                    method: {
+                        type: String,
+                        value:"post"
+                    },
+                    action: {
+                        type: String,
+                        value:"path/here"
+                    }
+
+                },
+
+                ready: function() {
+
+                }
+            });
+
+        })();
+    </script>
+</dom-module>

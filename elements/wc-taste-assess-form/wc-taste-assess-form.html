@@ -1,0 +1,72 @@
+<link rel="import" href="../../bower_components/polymer/polymer.html">
+<link rel="import" href="../../bower_components/iron-selector/iron-selectable.html">
+<link rel="import" href="../../bower_components/iron-form/iron-form.html">
+
+
+
+<dom-module id="wc-taste-assess-form">
+    <template>
+        <style>
+            :host {
+                display: block;
+                width:90%;
+                margin: 20px auto;
+            }
+
+            :host > ::content > :not(.iron-selected) {
+                display: none;
+            }
+
+
+
+            button.btn {
+                display: block;
+
+            }
+            button.back {
+                float: left;
+            }
+            button.forward {
+                float: right;
+            }
+
+
+        </style>
+
+        <content></content>
+        <button class="btn back" on-tap="_goPrevious"><-</button>
+        <button class="btn forward" on-tap="_goNext">-></button>
+    </template>
+
+    <script>
+        (function(){
+
+            Polymer({
+                is: "wc-taste-assess-form",
+
+                implements:"iron-form",
+
+                behaviors: [
+                    Polymer.IronSelectableBehavior
+                ],
+
+                ready: function() {
+                    this.setAttribute('selected',0);
+
+                },
+
+                _goNext: function () {
+                    this.selectNext();
+
+                },
+                _goPrevious: function () {
+                    this.selectPrevious();
+
+
+                }
+
+            });
+
+        })();
+    </script>
+</dom-module>

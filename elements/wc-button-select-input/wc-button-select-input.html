@@ -1,0 +1,86 @@
+<link rel="import" href="../../bower_components/polymer/polymer.html">
+<link rel="import" href="../../bower_components/iron-form-element-behavior/iron-form-element-behavior.html">
+<link rel="import" href="../../bower_components/iron-selector/iron-selector.html">
+
+
+
+
+
+<dom-module id="wc-button-select-input">
+    <template>
+        <style >
+
+            :host {
+                width: 100%;
+
+            }
+
+            :host > ::content > paper-button.iron-selected {
+                background: #eee;
+
+            }
+
+        </style>
+        <h4>[[label]]</h4>
+        <iron-selector selected$="[[_selectedChange(selected)]]">
+            <content>
+            </content>
+        </iron-selector>
+
+
+
+    </template>
+
+    <script>
+
+        (function(){
+
+            Polymer({
+                is: "wc-button-select-input",
+                behaviors:[
+                    Polymer.IronFormElementBehavior,
+                    Polymer.IronSelectableBehavior
+                ],
+
+                properties: {
+                    selected: {
+                        type: Number,
+                        value: 0,
+                        observer: "_selectedChange"
+                    },
+                    value: {
+                        type: String
+                    },
+                    name: {
+                        type: String,
+                        observer: "_nameToLabel"
+                    },
+                    label: {
+                        type: String,
+                        value: ""
+                    }
+
+                },
+                ready: function() {
+
+
+                },
+                _selectedChange(selected){
+                    this.value = selected;
+                    return selected;
+                },
+                _nameToLabel: function(name){
+                        var label;
+                        var arrOfWords = name.split("_");
+                        var capArrOfWords = arrOfWords.map(function(str) {
+                            return str.charAt(0).toUpperCase() + str.slice(1);
+                        });
+                        label = capArrOfWords.join(" ")
+                        this.label =  label;
+                }
+
+            });
+
+        })();
+    </script>
+</dom-module>

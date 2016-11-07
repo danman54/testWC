@@ -1,0 +1,73 @@
+<link rel="import" href="../../bower_components/polymer/polymer.html">
+<link rel="import" href="../../bower_components/iron-form-element-behavior/iron-form-element-behavior.html">
+<link rel="import" href="../../bower_components/paper-item/paper-item.html">
+
+
+
+
+
+<dom-module id="wc-aroma-value-input">
+    <template>
+        <style >
+
+            :host{
+                display: block;
+                padding: 10px;
+            }
+
+            :host.iron-selected {
+                @apply(--paper-menu-selected-item);
+            }
+
+        </style>
+
+
+        <content>
+
+        </content>
+
+
+
+    </template>
+
+    <script>
+
+        (function(){
+
+            Polymer({
+                is: "wc-aroma-value-input",
+                behaviors:[
+                    Polymer.IronFormElementBehavior,
+                    Polymer.PaperItemBehavior
+                ],
+
+                properties: {
+
+                    value: {
+                        type: Number,
+                        value: 0
+                    },
+                    name: {
+                        type: String
+                    }
+
+                },
+                ready: function() {
+                },
+
+                textToName : function(text){
+                    var arrOfWords = text.split(" ");
+                    var lowercaseArrOfWords = arrOfWords.map(function(str) {
+                        return str.toLowerCase()
+                    });
+                    var name  = lowercaseArrOfWords.join("_");
+                    this.name = name;
+                }
+
+            });
+
+
+
+        })();
+    </script>
+</dom-module>
